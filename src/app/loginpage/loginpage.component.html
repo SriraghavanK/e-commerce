@@ -1,0 +1,33 @@
+
+<div class="login-container d-flex justify-content-center align-items-center vh-100">
+
+ 
+    <div class="login-box p-5 border border-light  rounded m-5" style="background-color: rgb(176, 218, 204 , .7);" >
+  <h1>Login page</h1>
+ 
+  <form [formGroup]="loginform" (ngSubmit)="login()" >
+    <div *ngIf="showSuccessMessage" class="alert alert-success alert-dismissible fade show mt-4 text-center"  role="alert" >
+        Login Successful!
+       
+    </div>
+    <div *ngIf="showFailureMessage" class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+        Login Failed! Check your credentials!
+       
+    </div>
+    <label >Username: &nbsp; &nbsp; </label> <input type="text" name="username" class="mt-5 mb-3" formControlName="username" required><br>
+    <span *ngIf="!loginform.controls.username.valid && (loginform.controls.username.touched ||loginform.controls.username.dirty) " class="text-danger">
+        <span *ngIf="loginform.controls.username.errors?.['required']"> Username is required</span>
+        <span *ngIf="loginform.controls.username.errors?.['minlength']"> Minimum Length  is 4</span>
+    </span><br>
+    <label>Password: &nbsp; &nbsp; </label> <input type="password" name="password" class="mt-4 mb-4" formControlName="password"  required><br>
+    <span *ngIf="!loginform.controls.password.valid && (loginform.controls.password.touched ||loginform.controls.password.dirty)" class="text-danger">
+        <span *ngIf="loginform.controls.password.errors?.['required']"> Password is required</span>
+        <span *ngIf="loginform.controls.password.errors?.['minlength']"> Minimum Length  is 4</span>
+   
+    </span><br>
+    <button class="btn btn-success w-100 p-3 mb-5 mt-4 " type="submit">Login</button>
+   
+  </form>
+  </div>
+</div>
+

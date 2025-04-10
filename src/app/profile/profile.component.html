@@ -1,0 +1,451 @@
+<div class="container py-5 mt-5">
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && user" class="profile-container">
+    <!-- Profile Header -->
+    <div class="card border-0 shadow mb-4">
+      <div class="card-body p-0">
+        <div class="profile-header">
+          <div class="profile-cover bg-primary"></div>
+          <div class="profile-avatar-container">
+            <!-- Show preview if available, otherwise show current avatar -->
+            <img
+              [src]="previewUrl || user.avatar"
+              alt="Profile Picture"
+              class="profile-avatar"
+            />
+
+            <!-- Edit avatar button in view mode -->
+
+            <!-- Upload overlay during upload -->
+            <div *ngIf="isUploading" class="avatar-upload-overlay">
+              <div class="upload-progress">
+                <div class="spinner-border text-white" role="status">
+                  <span class="visually-hidden">Uploading...</span>
+                </div>
+                <span class="upload-text mt-2">Uploading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success Message -->
+        <div
+          *ngIf="showSuccessMessage"
+          class="alert alert-success alert-dismissible fade show mx-4 mt-4"
+          role="alert"
+        >
+          <i class="bi bi-check-circle-fill me-2"></i> Profile updated
+          successfully!
+          <button type="button" class="btn-close"></button>
+        </div>
+
+        <!-- View Mode Header -->
+        <div *ngIf="!isEditMode" class="profile-info p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <h2 class="mb-0">{{ user.name }}</h2>
+              <p class="text-muted mb-0">{{ user.role }}</p>
+            </div>
+            <div class="d-flex gap-2">
+              <button
+                class="btn btn-outline-primary"
+                (click)="toggleEditMode()"
+              >
+                <i class="bi bi-pencil-fill  me-2"></i> Edit Profile
+              </button>
+            </div>
+          </div>
+
+          <!-- View Mode Content -->
+          <div class="row mt-4">
+            <div class="col-md-6">
+              <div class="card border-0 bg-light mb-4">
+                <div class="card-body">
+                  <h5 class="card-title">About Me</h5>
+                  <p class="card-text">{{ user.bio }}</p>
+                </div>
+              </div>
+
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">Contact Information</h5>
+                  <ul class="list-group list-group-flush bg-transparent">
+                    <li
+                      class="list-group-item bg-transparent px-0 py-2 border-0"
+                    >
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-envelope-fill fa-bounce text-primary me-3"></i>
+                        <div class="email-container">
+                          <p class="mb-0 small text-muted">Email</p>
+                          <p class="mb-0 email-text">{{ user.email }}</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li
+                      class="list-group-item bg-transparent px-0 py-2 border-0"
+                    >
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-telephone-fill fa-bounce text-primary me-3"></i>
+                        <div>
+                          <p class="mb-0 small text-muted">Phone</p>
+                          <p class="mb-0">{{ user.phone }}</p>
+                        </div>
+                      </div>
+                    </li>
+                    <li
+                      class="list-group-item bg-transparent px-0 py-2 border-0"
+                    >
+                      <div class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill fa-bounce text-primary me-3"></i>
+                        <div>
+                          <p class="mb-0 small text-muted">Location</p>
+                          <p class="mb-0">{{ user.location }}</p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card border-0 bg-light mb-4">
+                <div class="card-body">
+                  <h5 class="card-title">Social Profiles</h5>
+                  <div class="d-flex gap-3 mt-3">
+                    <a
+                      *ngIf="user.social.discord"
+                      href="https://discord.com/{{ user.social.discord }}"
+                      target="_blank"
+                      class="btn btn-outline-primary"
+                    >
+                      <i class="bi bi-discord me-2"></i> Discord
+                    </a>
+                    <a
+                      *ngIf="user?.social?.linkedin"
+                      [href]="'https://www.linkedin.com/in/' + user.social.linkedin"
+                      target="_blank"
+                      class="btn btn-outline-primary"
+                    >
+                      <i class="bi bi-linkedin me-2"></i> LinkedIn
+                    </a>
+
+                    <a
+                      *ngIf="user?.social?.github"
+                      [href]="'https://github.com' + (user.social.github.startsWith('/') ? '' : '/') + user.social.github"
+                      target="_blank"
+                      class="btn btn-outline-primary"
+                    >
+                      <i class="bi bi-github me-2"></i> GitHub
+                    </a>
+                  
+                    <span
+                      *ngIf="
+                        !user.social.discord &&
+                        !user.social.linkedin &&
+                        !user.social.github
+                      "
+                      class="text-muted"
+                    >
+                      No social profiles linked
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card border-0 bg-light">
+                <div class="card-body">
+                  <h5 class="card-title">Statistics</h5>
+                  <div class="row text-center mt-3">
+                    <div class="col-4">
+                      <h3 class="mb-0">{{ user.stats.projects }}</h3>
+                      <p class="text-muted small">Projects</p>
+                    </div>
+                    <div class="col-4">
+                      <h3 class="mb-0">{{ user.stats.followers }}</h3>
+                      <p class="text-muted small">Followers</p>
+                    </div>
+                    <div class="col-4">
+                      <h3 class="mb-0">{{ user.stats.following }}</h3>
+                      <p class="text-muted small">Following</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Mode -->
+        <div *ngIf="isEditMode" class="profile-info p-4">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Edit Your Profile</h4>
+            <div class="d-flex gap-2">
+              <button
+                class="btn btn-outline-secondary"
+                (click)="toggleEditMode()"
+              >
+                <i class="bi bi-x-lg me-2"></i> Cancel
+              </button>
+              <button
+                class="btn btn-primary"
+                (click)="saveProfile()"
+                [disabled]="isSaving"
+              >
+                <span
+                  *ngIf="isSaving"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {{ isSaving ? "Saving..." : "Save Changes" }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Edit Form -->
+          <form [formGroup]="profileForm">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="name" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  formControlName="name"
+                  [ngClass]="{
+                    'is-invalid':
+                      profileForm.get('name')?.invalid &&
+                      profileForm.get('name')?.touched
+                  }"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('name')?.invalid &&
+                    profileForm.get('name')?.touched
+                  "
+                  class="invalid-feedback"
+                >
+                  Name is required
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="role" class="form-label">Role/Position</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="role"
+                  formControlName="role"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                  [ngClass]="{
+                    'is-invalid':
+                      profileForm.get('email')?.invalid &&
+                      profileForm.get('email')?.touched
+                  }"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('email')?.invalid &&
+                    profileForm.get('email')?.touched
+                  "
+                  class="invalid-feedback"
+                >
+                  <span *ngIf="profileForm.get('email')?.errors?.['required']"
+                    >Email is required</span
+                  >
+                  <span *ngIf="profileForm.get('email')?.errors?.['email']"
+                    >Please enter a valid email</span
+                  >
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  formControlName="phone"
+                  [ngClass]="{
+                    'is-invalid':
+                      profileForm.get('phone')?.invalid &&
+                      profileForm.get('phone')?.touched
+                  }"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('phone')?.invalid &&
+                    profileForm.get('phone')?.touched
+                  "
+                  class="invalid-feedback"
+                >
+                  Phone number is required
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="location" class="form-label">Location</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="location"
+                  formControlName="location"
+                />
+              </div>
+
+              <div class="col-md-6">
+                <label for="avatar" class="form-label">Profile Picture</label>
+                <div class="avatar-upload-container">
+                  <!-- Avatar preview with improved loading overlay -->
+                  <div class="avatar-preview">
+                    <img
+                      [src]="previewUrl || user.avatar"
+                      alt="Profile Picture"
+                      class="avatar-image"
+                    />
+
+                    <!-- Improved upload overlay -->
+                    <div *ngIf="isUploading" class="avatar-upload-overlay">
+                      <div class="upload-progress">
+                        <div class="spinner-border text-white" role="status">
+                          <span class="visually-hidden">Uploading...</span>
+                        </div>
+                        <span class="upload-text mt-2">Uploading...</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Upload controls -->
+                  <div class="avatar-controls">
+                    <input
+                      type="file"
+                      id="avatar"
+                      class="d-none"
+                      accept="image/jpeg,image/png,image/gif,image/webp"
+                      (change)="onFileSelected($event)"
+                    />
+
+                    <div class="d-flex gap-2 mt-2">
+                      <label for="avatar" class="btn btn-sm btn-primary">
+                        <i class="bi bi-upload me-1"></i>
+                        {{ previewUrl ? "Change" : "Upload" }}
+                      </label>
+
+                      <button
+                        *ngIf="previewUrl"
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        (click)="cancelImageUpload()"
+                      >
+                        <i class="bi bi-x-lg me-1"></i> Cancel
+                      </button>
+
+                      <button
+                        *ngIf="previewUrl && !isUploading"
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        (click)="updateAvatar()"
+                      >
+                        <i class="bi bi-check-lg me-1"></i> Apply
+                      </button>
+
+                      <button
+                        *ngIf="isUploading"
+                        type="button"
+                        class="btn btn-sm btn-success"
+                        disabled
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Uploading...
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <label for="bio" class="form-label">Bio</label>
+                <textarea
+                  class="form-control"
+                  id="bio"
+                  rows="3"
+                  formControlName="bio"
+                ></textarea>
+              </div>
+
+              <div class="col-12">
+                <h5 class="mt-4 mb-3">Social Profiles</h5>
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label for="discord" class="form-label">Discord</label>
+                    <div class="input-group">
+                      <span class="input-group-text">&#64;</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="discord"
+                        formControlName="social.discord"
+                        placeholder="username"
+                      />
+                    </div>
+                    <small class="text-muted">Without &#64; symbol</small>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="linkedin" class="form-label">LinkedIn</label>
+                    <div class="input-group">
+                      <span class="input-group-text">linkedin.com/in/</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="linkedin"
+                        formControlName="social.linkedin"
+                        placeholder="username"
+                      />
+                    </div>
+                    <small class="text-muted">Just your username</small>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="github" class="form-label">GitHub</label>
+                    <div class="input-group">
+                      <span class="input-group-text">github.com/</span>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="github"
+                        formControlName="social.github"
+                        placeholder="username"
+                      />
+                    </div>
+                    <small class="text-muted">Just your username</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

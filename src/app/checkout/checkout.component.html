@@ -1,0 +1,522 @@
+<div class="checkout-container">
+    <div class="container py-5">
+      <!-- Order Success Message -->
+      <div *ngIf="orderPlaced" class="order-success">
+        <div class="success-content text-center">
+          <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h2>Thank You for Your Order!</h2>
+          <p>Your order has been placed successfully.</p>
+          <p>Order #: <strong>{{ orderId }}</strong></p>
+          <p>A confirmation email has been sent to your email address.</p>
+          <div class="order-actions mt-4">
+            <a routerLink="/orders" class="btn btn-primary me-3">
+              <i class="fas fa-list-alt me-2"></i>View My Orders
+            </a>
+            <a routerLink="/home" class="btn btn-outline-primary">
+              <i class="fas fa-home me-2"></i>Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Checkout Process -->
+      <div *ngIf="!orderPlaced">
+        <div class="checkout-header">
+          <h1>Checkout</h1>
+          <div class="checkout-steps">
+            <div class="step" [ngClass]="{'active': currentStep >= 1, 'completed': currentStep > 1}">
+              <div class="step-number">1</div>
+              <div class="step-label">Shipping</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" [ngClass]="{'active': currentStep >= 2, 'completed': currentStep > 2}">
+              <div class="step-number">2</div>
+              <div class="step-label">Payment</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" [ngClass]="{'active': currentStep >= 3}">
+              <div class="step-number">3</div>
+              <div class="step-label">Review</div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <!-- Main Checkout Form -->
+          <div class="col-lg-8">
+            <div class="checkout-form">
+              <!-- Step 1: Shipping Information -->
+              <div *ngIf="currentStep === 1" class="checkout-step">
+                <h2>Shipping Information</h2>
+                
+                <!-- Saved Addresses -->
+                <div *ngIf="savedAddresses.length > 0" class="saved-addresses mb-4">
+                  <h3>Your Addresses</h3>
+                  <div class="row">
+                    <div class="col-md-6 mb-3" *ngFor="let address of savedAddresses">
+                      <div class="saved-address-card" [ngClass]="{'active': selectedSavedAddress === address}" (click)="selectAddress(address)">
+                        <div class="saved-address-badge" *ngIf="address.isDefault">Default</div>
+                        <h4>{{ address.name }}</h4>
+                        <p>{{ address.firstName }} {{ address.lastName }}</p>
+                        <p>{{ address.address }}</p>
+                        <p>{{ address.city }}, {{ address.state }} {{ address.zipCode }}</p>
+                        <p>{{ address.country }}</p>
+                        <p>{{ address.phone }}</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="saved-address-card add-new" (click)="selectAddress(null)">
+                        <div class="add-new-icon">
+                          <i class="fas fa-plus"></i>
+                        </div>
+                        <h4>Add New Address</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <form [formGroup]="shippingForm" *ngIf="!selectedSavedAddress || savedAddresses.length === 0">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="firstName" formControlName="firstName">
+                      <div *ngIf="isFieldInvalid(shippingForm, 'firstName')" class="text-danger">
+                        First name is required
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="lastName" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="lastName" formControlName="lastName">
+                      <div *ngIf="isFieldInvalid(shippingForm, 'lastName')" class="text-danger">
+                        Last name is required
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="email" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="email" formControlName="email">
+                      <div *ngIf="isFieldInvalid(shippingForm, 'email')" class="text-danger">
+                        Valid email is required
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="phone" class="form-label">Phone</label>
+                      <input type="tel" class="form-control" id="phone" formControlName="phone">
+                      <div *ngIf="isFieldInvalid(shippingForm, 'phone')" class="text-danger">
+                        Phone number is required
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" formControlName="address">
+                    <div *ngIf="isFieldInvalid(shippingForm, 'address')" class="text-danger">
+                      Address is required
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-5 mb-3">
+                      <label for="city" class="form-label">City</label>
+                      <input type="text" class="form-control" id="city" formControlName="city">
+                      <div *ngIf="isFieldInvalid(shippingForm, 'city')" class="text-danger">
+                        City is required
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <label for="state" class="form-label">State</label>
+                      <select class="form-select" id="state" formControlName="state">
+                        <option value="">Choose...</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="NY">New York</option>
+                        <option value="TX">Texas</option>
+                      </select>
+                      <div *ngIf="isFieldInvalid(shippingForm, 'state')" class="text-danger">
+                        State is required
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <label for="zipCode" class="form-label">Zip Code</label>
+                      <input type="text" class="form-control" id="zipCode" formControlName="zipCode">
+                      <div *ngIf="isFieldInvalid(shippingForm, 'zipCode')" class="text-danger">
+                        Valid zip code is required
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="country" class="form-label">Country</label>
+                    <select class="form-select" id="country" formControlName="country">
+                      <option value="United States">United States</option>
+                      <option value="Canada">Canada</option>
+                      <option value="Mexico">Mexico</option>
+                    </select>
+                  </div>
+                  
+                  <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="saveAddress" formControlName="saveAddress">
+                    <label class="form-check-label" for="saveAddress">
+                      Save this address for future purchases
+                    </label>
+                  </div>
+                </form>
+                
+                <div class="checkout-actions">
+                  <a routerLink="/cart" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Cart
+                  </a>
+                  <button class="btn btn-primary" (click)="nextStep()" [disabled]="!selectedSavedAddress && shippingForm.invalid">
+                    Continue to Payment<i class="fas fa-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Step 2: Payment Method -->
+              <div *ngIf="currentStep === 2" class="checkout-step">
+                <h2>Payment Method</h2>
+                
+                <!-- Saved Payment Methods -->
+                <div *ngIf="savedPaymentMethods.length > 0" class="saved-payment-methods mb-4">
+                  <h3>Your Payment Methods</h3>
+                  <div class="row">
+                    <div class="col-md-6 mb-3" *ngFor="let payment of savedPaymentMethods">
+                      <div class="saved-payment-card" [ngClass]="{'active': selectedSavedPayment === payment}" (click)="selectPaymentMethod2(payment)">
+                        <div class="saved-payment-badge" *ngIf="payment.isDefault">Default</div>
+                        <div class="saved-payment-icon">
+                          <i class="fab" [ngClass]="payment.type === 'credit' ? 'fa-credit-card' : 'fa-paypal'"></i>
+                        </div>
+                        <h4>{{ payment.name }}</h4>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="saved-payment-card add-new" (click)="selectedSavedPayment = null">
+                        <div class="add-new-icon">
+                          <i class="fas fa-plus"></i>
+                        </div>
+                        <h4>Add New Payment Method</h4>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div *ngIf="!selectedSavedPayment">
+                  <div class="payment-methods">
+                    <div class="payment-method" [ngClass]="{'active': paymentMethod === 'credit'}" (click)="selectPaymentMethod('credit')">
+                      <div class="payment-method-radio">
+                        <input type="radio" [checked]="paymentMethod === 'credit'" id="creditCard">
+                        <label for="creditCard"></label>
+                      </div>
+                      <div class="payment-method-content">
+                        <h3>Credit / Debit Card</h3>
+                        <div class="payment-icons">
+                          <i class="fab fa-cc-visa"></i>
+                          <i class="fab fa-cc-mastercard"></i>
+                          <i class="fab fa-cc-amex"></i>
+                          <i class="fab fa-cc-discover"></i>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="payment-method" [ngClass]="{'active': paymentMethod === 'paypal'}" (click)="selectPaymentMethod('paypal')">
+                      <div class="payment-method-radio">
+                        <input type="radio" [checked]="paymentMethod === 'paypal'" id="paypal">
+                        <label for="paypal"></label>
+                      </div>
+                      <div class="payment-method-content">
+                        <h3>PayPal</h3>
+                        <div class="payment-icons">
+                          <i class="fab fa-paypal"></i>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="payment-method" [ngClass]="{'active': paymentMethod === 'gpay'}" (click)="selectPaymentMethod('gpay')">
+                      <div class="payment-method-radio">
+                        <input type="radio" [checked]="paymentMethod === 'gpay'" id="gpay">
+                        <label for="gpay"></label>
+                      </div>
+                      <div class="payment-method-content">
+                        <h3>Google Pay</h3>
+                        <div class="payment-icons">
+                          <i class="fab fa-google-pay"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Credit Card Form -->
+                  <div *ngIf="paymentMethod === 'credit'" class="credit-card-form">
+                    <form [formGroup]="paymentForm">
+                      <div class="mb-3">
+                        <label for="cardName" class="form-label">Name on Card</label>
+                        <input type="text" class="form-control" id="cardName" formControlName="cardName">
+                        <div *ngIf="isFieldInvalid(paymentForm, 'cardName')" class="text-danger">
+                          Name on card is required
+                        </div>
+                      </div>
+                      
+                      <div class="mb-3">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control" id="cardNumber" formControlName="cardNumber" placeholder="1234 5678 9012 3456">
+                          <span class="input-group-text">
+                            <i class="fab" [ngClass]="getCardIcon()"></i>
+                          </span>
+                        </div>
+                        <div *ngIf="isFieldInvalid(paymentForm, 'cardNumber')" class="text-danger">
+                          Valid card number is required
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-md-4 mb-3">
+                          <label for="cardExpMonth" class="form-label">Month</label>
+                          <select class="form-select" id="cardExpMonth" formControlName="cardExpMonth">
+                            <option value="">Month</option>
+                            <option *ngFor="let month of months" [value]="month">
+                              {{ month < 10 ? '0' + month : month }}
+                            </option>
+                          </select>
+                          <div *ngIf="isFieldInvalid(paymentForm, 'cardExpMonth')" class="text-danger">
+                            Required
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="cardExpYear" class="form-label">Year</label>
+                          <select class="form-select" id="cardExpYear" formControlName="cardExpYear">
+                            <option value="">Year</option>
+                            <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+                          </select>
+                          <div *ngIf="isFieldInvalid(paymentForm, 'cardExpYear')" class="text-danger">
+                            Required
+                          </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                          <label for="cardCvv" class="form-label">CVV</label>
+                          <input type="text" class="form-control" id="cardCvv" formControlName="cardCvv" placeholder="123">
+                          <div *ngIf="isFieldInvalid(paymentForm, 'cardCvv')" class="text-danger">
+                            Required
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="saveCard" formControlName="saveCard">
+                        <label class="form-check-label" for="saveCard">
+                          Save this card for future purchases
+                        </label>
+                      </div>
+                    </form>
+                  </div>
+                  
+                  <!-- PayPal -->
+                  <div *ngIf="paymentMethod === 'paypal'" class="paypal-section">
+                    <div class="paypal-info">
+                      <p>You will be redirected to PayPal to complete your purchase securely.</p>
+                      <div class="paypal-logo">
+                        <i class="fab fa-paypal fa-3x"></i>
+                      </div>
+                      <button class="btn btn-paypal mt-3">
+                        <i class="fab fa-paypal me-2"></i>Pay with PayPal
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Google Pay -->
+                  <div *ngIf="paymentMethod === 'gpay'" class="gpay-section">
+                    <div class="gpay-info">
+                      <p>Complete your purchase quickly and securely with Google Pay.</p>
+                      <div class="gpay-logo">
+                        <i class="fab fa-google-pay fa-3x"></i>
+                      </div>
+                      
+                      <div *ngIf="!googlePayLoaded" class="gpay-loading">
+                        <div class="spinner-border text-primary" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading Google Pay...</p>
+                      </div>
+                      
+                      <button *ngIf="googlePayLoaded" class="btn btn-gpay mt-3" (click)="initiateGooglePay()" [disabled]="googlePayButtonClicked">
+                        <div *ngIf="!googlePayButtonClicked">
+                          <i class="fab fa-google me-2"></i>Pay with Google Pay
+                        </div>
+                        <div *ngIf="googlePayButtonClicked" class="d-flex align-items-center justify-content-center">
+                          <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                          </div>
+                          Processing...
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="checkout-actions">
+                  <button class="btn btn-outline-secondary" (click)="prevStep()">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Shipping
+                  </button>
+                  <button class="btn btn-primary" (click)="nextStep()" 
+                    [disabled]="!selectedSavedPayment && paymentMethod === 'credit' && paymentForm.invalid">
+                    Review Order<i class="fas fa-arrow-right ms-2"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <!-- Step 3: Review Order -->
+              <div *ngIf="currentStep === 3" class="checkout-step">
+                <h2>Review Your Order</h2>
+                
+                <div class="review-sections">
+                  <div class="review-section">
+                    <div class="review-header">
+                      <h3>Shipping Information</h3>
+                      <button class="btn btn-link" (click)="currentStep = 1">Edit</button>
+                    </div>
+                    <div class="review-content">
+                      <p><strong>{{ selectedSavedAddress ? selectedSavedAddress.firstName : shippingForm.get('firstName')?.value }} {{ selectedSavedAddress ? selectedSavedAddress.lastName : shippingForm.get('lastName')?.value }}</strong></p>
+                      <p>{{ selectedSavedAddress ? selectedSavedAddress.address : shippingForm.get('address')?.value }}</p>
+                      <p>{{ selectedSavedAddress ? selectedSavedAddress.city : shippingForm.get('city')?.value }}, {{ selectedSavedAddress ? selectedSavedAddress.state : shippingForm.get('state')?.value }} {{ selectedSavedAddress ? selectedSavedAddress.zipCode : shippingForm.get('zipCode')?.value }}</p>
+                      <p>{{ selectedSavedAddress ? selectedSavedAddress.country : shippingForm.get('country')?.value }}</p>
+                      <p>{{ selectedSavedAddress ? selectedSavedAddress.email : shippingForm.get('email')?.value }}</p>
+                      <p>{{ selectedSavedAddress ? selectedSavedAddress.phone : shippingForm.get('phone')?.value }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="review-section">
+                    <div class="review-header">
+                      <h3>Payment Method</h3>
+                      <button class="btn btn-link" (click)="currentStep = 2">Edit</button>
+                    </div>
+                    <div class="review-content">
+                      <div *ngIf="paymentMethod === 'credit'">
+                        <p>
+                          <i class="fab" [ngClass]="getCardIcon()"></i>
+                          Credit Card ending in {{ selectedSavedPayment ? selectedSavedPayment.cardNumber.slice(-4) : paymentForm.get('cardNumber')?.value?.slice(-4) }}
+                        </p>
+                        <p>{{ selectedSavedPayment ? selectedSavedPayment.cardName : paymentForm.get('cardName')?.value }}</p>
+                        <p>Expires: {{ selectedSavedPayment ? selectedSavedPayment.cardExpMonth : paymentForm.get('cardExpMonth')?.value }}/{{ selectedSavedPayment ? selectedSavedPayment.cardExpYear : paymentForm.get('cardExpYear')?.value }}</p>
+                      </div>
+                      <div *ngIf="paymentMethod === 'paypal'">
+                        <p><i class="fab fa-paypal"></i> PayPal</p>
+                      </div>
+                      <div *ngIf="paymentMethod === 'gpay'">
+                        <p><i class="fab fa-google-pay"></i> Google Pay</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="review-section">
+                    <div class="review-header">
+                      <h3>Order Items</h3>
+                      <a routerLink="/cart" class="btn btn-link">Edit</a>
+                    </div>
+                    <div class="review-content">
+                      <div class="review-items">
+                        <div class="review-item" *ngFor="let item of cartItems">
+                          <div class="review-item-image">
+                            <img [src]="item.image" [alt]="item.title">
+                          </div>
+                          <div class="review-item-details">
+                            <h4>{{ item.title }}</h4>
+                            <p>Quantity: {{ item.quantity }}</p>
+                            <p class="review-item-price">${{ (item.price * item.quantity).toFixed(2) }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="checkout-actions">
+                  <button class="btn btn-outline-secondary" (click)="prevStep()">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Payment
+                  </button>
+                  <button class="btn btn-success" (click)="placeOrder()" [disabled]="processingPayment">
+                    <i class="fas fa-lock me-2"></i>
+                    <span *ngIf="!processingPayment">Place Order</span>
+                    <span *ngIf="processingPayment">
+                      <i class="fas fa-spinner fa-spin me-2"></i>Processing...
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Order Summary -->
+          <div class="col-lg-4">
+            <div class="order-summary">
+              <h2>Order Summary</h2>
+              <div class="order-items">
+                <div class="order-item" *ngFor="let item of cartItems">
+                  <div class="order-item-image">
+                    <img [src]="item.image" [alt]="item.title">
+                  </div>
+                  <div class="order-item-details">
+                    <h4>{{ item.title }}</h4>
+                    <p>Qty: {{ item.quantity }}</p>
+                  </div>
+                  <div class="order-item-price">
+                    ${{ (item.price * item.quantity).toFixed(2) }}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="order-totals">
+                <div class="order-total-item">
+                  <span>Subtotal</span>
+                  <span>${{ cartTotal.toFixed(2) }}</span>
+                </div>
+                <div class="order-total-item">
+                  <span>Shipping</span>
+                  <span *ngIf="shippingCost > 0">${{ shippingCost.toFixed(2) }}</span>
+                  <span *ngIf="shippingCost === 0" class="text-success">Free</span>
+                </div>
+                <div class="order-total-item">
+                  <span>Tax (8%)</span>
+                  <span>${{ taxAmount.toFixed(2) }}</span>
+                </div>
+                <div class="order-total-divider"></div>
+                <div class="order-total-item total">
+                  <span>Total</span>
+                  <span>${{ orderTotal.toFixed(2) }}</span>
+                </div>
+              </div>
+              
+              <div class="secure-checkout">
+                <div class="secure-checkout-icon">
+                  <i class="fas fa-lock"></i>
+                </div>
+                <p>Your payment information is processed securely. We do not store credit card details nor have access to your credit card information.</p>
+              </div>
+              
+              <div class="accepted-payment-methods">
+                <p>We Accept:</p>
+                <div class="payment-icons">
+                  <i class="fab fa-cc-visa"></i>
+                  <i class="fab fa-cc-mastercard"></i>
+                  <i class="fab fa-cc-amex"></i>
+                  <i class="fab fa-cc-discover"></i>
+                  <i class="fab fa-cc-paypal"></i>
+                  <i class="fab fa-google-pay"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

@@ -1,0 +1,396 @@
+<div class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="hero-title">Welcome to <span class="text-primary">Tech Mart</span></h1>
+        <p class="hero-subtitle">Your one-stop destination for the latest technology products</p>
+        <div class="hero-buttons">
+          <a routerLink="/products" fragment="mobile" class="btn btn-primary me-3">
+            <i class="fa-solid fa-mobile-screen-button  fa-bounce me-2"></i>Explore Mobiles
+          </a>
+          <a routerLink="/products" fragment="laptop" class="btn btn-outline-primary">
+            <i class="fa-solid fa-laptop  fa-bounce me-2"></i>Browse Laptops
+          </a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-image">
+          <img src="assets/images/hero-tech.png" alt="Latest Technology" class="img-fluid" 
+               onerror="this.src='https://imgs.search.brave.com/J70q6x8TuWy-2kUbpwz8mIXXMQK6Cvu26cqA28jheMA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvZmVhdHVy/ZWQvbGFwdG9wLW11/cmpwMW5rNGxwMWlk/bHQuanBn'; this.onerror=null;">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="trending-section py-5">
+  <div class="container">
+    <div class="section-header">
+      <div class="d-flex align-items-center justify-content-center mb-4">
+        <i class="fa-solid fa-fire  fa-bounce text-warning fs-3 me-2"></i>
+        <h2 class="section-title mb-0">Trending Products</h2>
+      </div>
+      <p class="text-center text-muted">Discover what's hot in tech right now</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6 col-lg-6 mb-4 mt-5 " *ngFor="let product of trendingProducts">
+        <div class="trending-card">
+          <div class="badge {{product.badge?.class}} position-absolute top-0 end-0 m-2" *ngIf="product.badge">{{product.badge.text}}</div>
+          <img [src]="product.image" [alt]="product.name" class="trending-img">
+          <div class="trending-info">
+            <h5>{{product.name}}</h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="price">₹{{product.price.toFixed(2)}}</span>
+             
+            </div><br>
+            <button class="btn btn-sm btn-primary " (click)="addToCart(product)" style="width: 100%;padding: 8px; border-radius: 10px;">
+              <i class="fa-solid fa-cart-plus  fa-bounce me-1"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="categories-section py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title">Explore Our Categories</h2>
+      <p class="text-muted">Find exactly what you're looking for</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-6 col-md-3 mb-4">
+        <div class="category-card" routerLink="/products" fragment="mobile">
+          <div class="category-icon">
+            <i class="fa-solid fa-mobile-screen-button  fa-bounce"></i>
+          </div>
+          <h4>Smartphones</h4>
+          <p>Latest models from top brands</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 mb-4">
+        <div class="category-card" routerLink="/products" fragment="laptop">
+          <div class="category-icon">
+            <i class="fa-solid fa-laptop  fa-bounce"></i>
+          </div>
+          <h4>Laptops</h4>
+          <p>For work and gaming</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 mb-4">
+        <div class="category-card" routerLink="/products" fragment="other-products">
+          <div class="category-icon">
+            <i class="fa-solid fa-tablet-screen-button  fa-bounce"></i>
+          </div>
+          <h4>Tablets</h4>
+          <p>Portable computing solutions</p>
+        </div>
+      </div>
+      <div class="col-6 col-md-3 mb-4">
+        <div class="category-card" routerLink="/products" fragment="other-products">
+          <div class="category-icon">
+            <i class="fa-solid fa-gamepad  fa-bounce"></i>
+          </div>
+          <h4>Gaming</h4>
+          <p>Consoles and accessories</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div #mobileSection id="mobile-products" class="products-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title">Our Mobile Products</h2>
+      <p class="text-muted">Cutting-edge smartphones for every need</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12  col-lg-4 mb-4">
+        <div class="card product-card h-100">
+          <div class="product-badge bg-danger">Premium</div>
+          <img src="https://shorturl.at/IY9tM" class="card-img-top" alt="Samsung S24 Ultra">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Samsung S24 Ultra</h5>
+            <div class="product-rating mb-2">
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star-half-stroke  fa-bounce text-warning"></i>
+              <span class="ms-1 text-muted">(4.5)</span>
+            </div>
+            <p class="card-text flex-grow-1">
+              The Samsung Galaxy S24 Ultra features a Dynamic AMOLED display, advanced camera, and Snapdragon 8 Gen 3 processor.
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="product-price">₹99999.99</span>
+              
+            </div><br>
+            <button class="btn btn-primary" (click)="addToCart({id: 1, title: 'Samsung S24 Ultra', price: 99999.99, image: 'https://shorturl.at/IY9tM'})">
+              <i class="fa-solid fa-cart-plus  fa-bounce me-2"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-4 mb-4">
+        <div class="card product-card h-100">
+          <div class="product-badge bg-primary">New</div>
+          <img src="https://shorturl.at/keVMd" class="card-img-top" alt="iPhone 16 Pro Max">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">iPhone 16 Pro Max</h5>
+            <div class="product-rating mb-2">
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <span class="ms-1 text-muted">(5.0)</span>
+            </div>
+            <p class="card-text flex-grow-1">
+              The iPhone 16 Pro Max has a 6.9-inch Super Retina XDR display, an advanced camera system, and long battery life.
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="product-price">₹109999.99</span>
+              
+            </div><br>
+            <button class="btn btn-primary " (click)="addToCart({id: 2, title: 'iPhone 16 Pro Max', price: 109999.99, image: 'https://shorturl.at/keVMd'})">
+              <i class="fa-solid fa-cart-plus  fa-bounce me-2"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-4 mb-4">
+        <div class="card product-card h-100">
+          <div class="product-badge bg-success">Gaming</div>
+          <img src="https://shorturl.at/MgUxK" class="card-img-top" alt="Redmagic 10 Pro">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Redmagic 10 Pro</h5>
+            <div class="product-rating mb-2">
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-regular fa-star fa-bounce text-warning"></i>
+              <span class="ms-1 text-muted">(4.0)</span>
+            </div>
+            <p class="card-text flex-grow-1">
+              The Red Magic 10 Pro is a gaming smartphone with a Snapdragon 8 Elite processor, 144Hz AMOLED display, and advanced cooling.
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="product-price">₹69999.99</span>
+              
+            </div><br>
+            <button class="btn btn-primary" (click)="addToCart({id: 3, title: 'Redmagic 10 Pro', price: 69999.99, image: 'https://shorturl.at/MgUxK'})">
+              <i class="fa-solid fa-cart-plus fa-bounce me-2"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-4">
+      <a routerLink="/products" fragment="mobileBrands" class="btn btn-outline-primary">
+        View All Mobile Products <i class="fa-solid fa-arrow-right fa-bounce ms-2"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div #laptopSection id="laptop-products" class="products-section py-5 bg-light">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2 class="section-title">Our Laptop Products</h2>
+      <p class="text-muted">Powerful laptops for work and play</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12 col-lg-4 mb-4">
+        <div class="card product-card h-100">
+          <div class="product-badge bg-danger">Gaming</div>
+          <img src="https://shorturl.at/ZkMTs" class="card-img-top" alt="ROG Strix SCAR 18">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">ROG Strix SCAR 18</h5>
+            <div class="product-rating mb-2">
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star-half-stroke fa-bounce text-warning"></i>
+              <span class="ms-1 text-muted">(4.7)</span>
+            </div>
+            <p class="card-text flex-grow-1">
+              The ROG Strix SCAR 18 is a powerful gaming laptop with a high-refresh-rate display and advanced cooling.
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="product-price">₹209999.99</span>
+              
+            </div><br>
+            <button class="btn btn-primary" (click)="addToCart({id: 4, title: 'ROG Strix SCAR 18', price: 2499.99, image: 'https://shorturl.at/ZkMTs'})">
+              <i class="fa-solid fa-cart-plus fa-bounce me-2"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-4 mb-4">
+        <div class="card product-card h-100">
+          <div class="product-badge bg-primary">Premium</div>
+          <img src="https://shorturl.at/jdmjh" class="card-img-top" alt="MacBook Pro">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">MacBook Pro</h5>
+            <div class="product-rating mb-2">
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star  fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <span class="ms-1 text-muted">(5.0)</span>
+            </div>
+            <p class="card-text flex-grow-1">
+              The MacBook Pro features high-performance processors, a stunning Retina display, and long battery life.
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="product-price">₹159999.99</span>
+              
+            </div><br>
+            <button class="btn btn-primary" (click)="addToCart({id: 5, title: 'MacBook Pro', price: 1899.99, image: 'https://shorturl.at/jdmjh'})">
+              <i class="fa-solid fa-cart-plus fa-bounce me-2"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 col-lg-4 mb-4">
+        <div class="card product-card h-100">
+          <div class="product-badge bg-success">Budget</div>
+          <img src="https://shorturl.at/gyzd8" class="card-img-top" alt="Lenovo Ideapad Slim 5i">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Lenovo Ideapad Slim 5i</h5>
+            <div class="product-rating mb-2">
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-solid fa-star fa-bounce text-warning"></i>
+              <i class="fa-regular fa-star fa-bounce text-warning"></i>
+              <span class="ms-1 text-muted">(4.2)</span>
+            </div>
+            <p class="card-text flex-grow-1">
+              The Lenovo IdeaPad Slim 5i is a budget-friendly laptop with a 16-inch display and great battery life.
+            </p>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <span class="product-price">₹65999.99</span>
+              
+            </div><br><button class="btn btn-primary" (click)="addToCart({id: 6, title: 'Lenovo Ideapad Slim 5i', price: 799.99, image: 'https://shorturl.at/gyzd8'})">
+              <i class="fa-solid fa-cart-plus  fa-bounce me-2"></i>Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-4">
+      <a routerLink="/products" fragment="laptop" class="btn btn-outline-primary">
+        View All Laptop Products <i class="fa-solid fa-arrow-right fa-bounce ms-2"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="testimonials-section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <div class="d-flex align-items-center justify-content-center mb-3">
+        <i class="fa-solid fa-star fa-bounce text-warning  fs-3 me-2"></i>
+        <h2 class="section-title mb-0">What Our Customers Say</h2>
+      </div>
+      <p class="text-muted">Trusted by tech enthusiasts worldwide</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card">
+          <div class="testimonial-rating mb-3">
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+          </div>
+          <p class="testimonial-text">"Great prices and fast delivery! The product arrived in perfect condition and works exactly as described."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">
+              <span>AJ</span>
+            </div>
+            <div>
+              <h5 class="mb-0">Alice Johnson</h5>
+              <p class="text-muted mb-0">Verified Buyer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card">
+          <div class="testimonial-rating mb-3">
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-regular fa-star fa-bounce text-warning"></i>
+          </div>
+          <p class="testimonial-text">"Amazing customer support and genuine products. Had a small issue but their team resolved it immediately."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">
+              <span>JS</span>
+            </div>
+            <div>
+              <h5 class="mb-0">John Smith</h5>
+              <p class="text-muted mb-0">Verified Buyer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="testimonial-card">
+          <div class="testimonial-rating mb-3">
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+            <i class="fa-solid fa-star fa-bounce text-warning"></i>
+          </div>
+          <p class="testimonial-text">"Highly recommend Tech Mart! Their selection is amazing and the website makes finding what I need so easy."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">
+              <span>ED</span>
+            </div>
+            <div>
+              <h5 class="mb-0">Emily Davis</h5>
+              <p class="text-muted mb-0">Verified Buyer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="newsletter-section py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h3>Stay Updated with Tech Mart</h3>
+        <p>Subscribe to our newsletter for exclusive deals, new product announcements, and tech tips.</p>
+      </div>
+      <div class="col-lg-6">
+        <form class="d-flex" (ngSubmit)="onSubscribe()">
+          <input type="email" class="form-control me-2" placeholder="Your email address" [(ngModel)]="email" name="email">
+          <button type="submit" class="btn btn-light">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

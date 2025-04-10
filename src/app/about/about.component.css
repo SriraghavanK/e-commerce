@@ -1,0 +1,94 @@
+.about-container {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Heading Styles */
+.about-container h1, .about-container h2, .about-container h3 {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.about-container p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.7;
+}
+
+/* Company Logo */
+.about-container img {
+    width: 100%; /* Makes image responsive */
+    max-width: 250px; /* Restricts maximum size */
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    display: block;
+    margin: auto;
+}
+/* Icon Styling */
+.about-container .fa-solid {
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+/* Core Values Section */
+.about-container .row.text-center .col-md-4 {
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.about-container .row.text-center .col-md-4:hover {
+    transform: scale(1.05);
+}
+
+/* Team Section */
+
+/* Achievements & Future Plans */
+.about-container .fa-trophy, 
+.about-container .fa-rocket {
+    color: #ff9800;
+    margin-bottom: 10px;
+}
+/* Team Section */
+.team-img {
+    width: 100%; /* Makes image responsive */
+    max-width: 180px; /* Restricts maximum size */
+    height: 250px; /* Maintains aspect ratio */
+    border-radius: 50%;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+    margin: auto; /* Centers the image */
+    transition: transform 0.3s ease-in-out;
+}
+
+.team-img:hover {
+    transform: scale(1.08); /* Slight zoom effect on hover */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .team-img {
+        max-width: 120px; /* Smaller image size on mobile */
+    }
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .about-container {
+        padding: 40px 15px;
+    }
+
+    .about-container h1, .about-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .about-container .team-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .about-container .fa-solid {
+        font-size: 2.5rem;
+    }
+}

@@ -1,0 +1,245 @@
+<div class="container mt-5 pt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="text-center product-title">Tech Mart Products</h1>
+      <p class="text-center text-muted">
+        Discover the latest technology products
+      </p>
+    </div>
+  </div>
+
+  <!-- Category Filter Tabs -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="category-tabs">
+        <button
+          class="category-tab"
+          [class.active]="activeCategory === 'all'"
+          (click)="filterByCategory('all')"
+        >
+          All Products
+        </button>
+        <button
+          class="category-tab"
+          [class.active]="activeCategory === 'mobile'"
+          (click)="filterByCategory('mobile')"
+          id="mobileBrands"
+        >
+          Mobile Phones
+        </button>
+        <button
+          class="category-tab"
+          [class.active]="activeCategory === 'laptop'"
+          (click)="filterByCategory('laptop')"
+        >
+          Laptops
+        </button>
+        <button
+          class="category-tab"
+          [class.active]="activeCategory === 'otherelectronics'"
+          (click)="filterByCategory('otherelectronics')"
+        >
+          Other Electronics
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand Filter (shows when a category is selected) -->
+  <div class="row mb-4" *ngIf="activeCategory !== 'all'">
+    <div class="col-12">
+      <div class="brand-filter">
+        <button
+          class="brand-btn"
+          [class.active]="activeBrand === 'all'"
+          (click)="filterByBrand('all')"
+        >
+          All Brands
+        </button>
+
+        <!-- Mobile Brands -->
+        <ng-container *ngIf="activeCategory === 'mobile'">
+          <button
+            *ngFor="let brand of getMobileBrands()"
+            class="brand-btn"
+            [class.active]="activeBrand === brand.toLowerCase()"
+            (click)="filterByBrand(brand.toLowerCase())"
+          >
+            {{ brand }}
+          </button>
+        </ng-container>
+
+        <!-- Laptop Brands -->
+        <ng-container *ngIf="activeCategory === 'laptop'">
+          <button
+            *ngFor="let brand of getLaptopBrands()"
+            class="brand-btn"
+            [class.active]="activeBrand === brand.toLowerCase()"
+            (click)="filterByBrand(brand.toLowerCase())"
+          >
+            {{ brand }}
+          </button>
+        </ng-container>
+
+        <!-- Other Electronics Categories -->
+        <ng-container *ngIf="activeCategory === 'otherelectronics'">
+          <button
+            *ngFor="let category of getOtherCategories()"
+            class="brand-btn"
+            [class.active]="activeBrand === category.toLowerCase()"
+            (click)="filterByBrand(category.toLowerCase())"
+          >
+            {{ category }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sort and Filter Options -->
+  <div class="row mb-4">
+    <div class="col-md-6 mb-3 mb-md-0">
+      <div class="input-group">
+        <span class="input-group-text"><i class="fa-solid fa-search"></i></span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search products..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()"
+        />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="input-group">
+        <span class="input-group-text">Sort By</span>
+        <select
+          class="form-select"
+          [(ngModel)]="sortOption"
+          (change)="applyFilters()"
+        >
+          <option value="featured">Featured</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="name-asc">Name: A to Z</option>
+          <option value="name-desc">Name: Z to A</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Grid -->
+  <div class="row">
+    <div class="col-12" *ngIf="filteredProducts.length === 0">
+      <div class="no-products">
+        <i class="fa-solid fa-box-open fa-3x mb-3"></i>
+        <h3>No products found</h3>
+        <p>Try adjusting your filters or search term</p>
+      </div>
+    </div>
+
+    <div
+      class="col-sm-6 col-lg-4 col-xl-3 mb-4"
+      *ngFor="let product of filteredProducts"
+    >
+      <div class="product-card">
+        <div class="product-badge" *ngIf="product.badge">
+          {{ product.badge }}
+        </div>
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.title" />
+        </div>
+        <div class="product-info">
+          <h5 class="product-title">{{ product.title }}</h5>
+          <div class="product-rating" *ngIf="product.rating">
+            <i
+              class="fa-solid fa-star fa-bounce"
+              *ngFor="
+                let star of [1, 2, 3, 4, 5].slice(0, Math.floor(product.rating))
+              "
+            ></i>
+            <i
+              class="fa-solid fa-star-half-stroke fa-bounce"
+              *ngIf="product.rating % 1 >= 0.5"
+            ></i>
+            <i
+              class="fa-regular fa-star fa-bounce"
+              *ngFor="
+                let star of [1, 2, 3, 4, 5].slice(
+                  0,
+                  5 - Math.ceil(product.rating)
+                )
+              "
+            ></i>
+            <span class="rating-text">({{ product.rating }})</span>
+          </div>
+          <p class="product-description">
+            {{ product.description | slice : 0 : 100
+            }}{{ product.description.length > 100 ? "..." : "" }}
+          </p>
+          <div class="product-price">₹{{ product.price.toFixed(2) }}</div>
+
+          <div class="product-actions">
+            <div class="quantity-control">
+              <button
+                class="quantity-btn"
+                (click)="decreaseQuantity(product)"
+                [disabled]="product.quantity <= 1"
+              >
+                <i class="fa-solid fa-minus "></i>
+              </button>
+              <span class="quantity">{{ product.quantity || 1 }}</span>
+              <button class="quantity-btn" (click)="increaseQuantity(product)">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+          <br />
+          <button class="add-to-cart-btn" (click)="addToCart(product)">
+            <i class="fa-solid fa-cart-plus fa-bounce"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="row mt-4 mb-5">
+    <div class="col-12">
+      <nav aria-label="Product pagination">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <a
+              class="page-link"
+              href="javascript:void(0)"
+              (click)="changePage(currentPage - 1)"
+            >
+              <i class="fa-solid fa-chevron-left"></i>
+            </a>
+          </li>
+          <li
+            class="page-item"
+            *ngFor="let page of getPageNumbers()"
+            [class.active]="page === currentPage"
+          >
+            <a
+              class="page-link"
+              href="javascript:void(0)"
+              (click)="changePage(page)"
+              >{{ page }}</a
+            >
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <a
+              class="page-link"
+              href="javascript:void(0)"
+              (click)="changePage(currentPage + 1)"
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

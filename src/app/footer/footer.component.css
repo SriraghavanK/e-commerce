@@ -1,0 +1,49 @@
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: #212529;
+  color: white;
+  padding: 30px 0;
+}
+
+footer h5 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+footer p {
+  font-size: 0.9rem;
+}
+
+footer ul {
+  padding: 0;
+}
+
+footer ul li {
+  list-style: none;
+}
+
+footer ul li a {
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer ul li a:hover {
+  color: #0d6efd;
+}
+
+.newsletter input {
+  max-width: 250px;
+}
+
+.newsletter button {
+  background-color: #0d6efd;
+  border: none;
+}
+
+@media (max-width: 576px) {
+  .newsletter input {
+    width: 100%;
+  }
+}

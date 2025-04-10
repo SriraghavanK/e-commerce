@@ -1,0 +1,296 @@
+<div class="content-wrapper">
+  <nav class="navbar navbar-light bg-light fixed-top">
+    <div class="container-fluid d-flex align-items-center">
+      <div class="d-flex align-items-center">
+        <a class="navbar-brand">Tech Mart</a>
+        <button
+          class="navbar-toggler me-auto"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasLeft"
+          aria-controls="offcanvasLeft"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <ul class="nav ms-auto">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            [routerLink]="['/cart']"
+            routerLinkActive="active"
+            style="text-decoration: none !important"
+            ><i class="fa-solid fa-cart-shopping fa-bounce"></i>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              *ngIf="cartItemCount > 0"
+            >
+              {{ cartItemCount }}
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="['/profile']"
+            routerLinkActive="active"
+            style="text-decoration: none !important"
+            ><i class="fa-solid fa-user fa-bounce"></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            (click)="logout()"
+            routerLinkActive="active"
+            style="cursor: pointer"
+            ><i class="fa-solid fa-arrow-right-from-bracket fa-bounce"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<!-- Offcanvas Sidebar with Categories -->
+<div
+  class="offcanvas offcanvas-start"
+  tabindex="-1"
+  id="offcanvasLeft"
+  aria-labelledby="offcanvasLeftLabel"
+  data-bs-scroll="true"
+  data-bs-backdrop="false"
+  (shown.bs.offcanvas)="onOffcanvasShow()"
+  (hidden.bs.offcanvas)="onOffcanvasHide()"
+>
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Tech Mart</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="offcanvas-body text-start">
+    <ul
+      class="navbar-nav text-start ms-1"
+      style="font-size: 16px; font-weight: 500"
+    >
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/home']" routerLinkActive="active">
+          <span>
+            <i class="fa-solid fa-home fa-bounce   me-2"></i>
+            Home
+          </span>
+          <i class="fa-solid fa-arrow-right-long fa-bounce"></i>
+        </a>
+      </li>
+
+      <!-- Products Category with Dropdown -->
+
+      <li class="nav-item mt-3">
+        <a
+          class="nav-link"
+          data-bs-toggle="collapse"
+          href="#productsCollapse"
+          role="button"
+        >
+          <span>
+            <i class="fa-solid fa-box fa-bounce me-2"></i>
+            Products
+          </span>
+          <i class="fa-solid fa-chevron-down fa-bounce"></i>
+        </a>
+
+        <div class="collapse products-submenu" id="productsCollapse">
+          <a
+            class="category-item"
+            data-bs-toggle="collapse"
+            href="#mobileBrands"
+          >
+            <i class="fa-solid fa-mobile-screen fa-bounce"></i>
+            Mobile Phones
+            <i class="fa-solid fa-chevron-down fa-bounce ms-auto"></i>
+          </a>
+          <div class="collapse brand-submenu" id="mobileBrands">
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'mobile', brand: 'samsung' }"
+              data-bs-dismiss="offcanvas"
+              >Samsung</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'mobile', brand: 'apple' }"
+              data-bs-dismiss="offcanvas"
+              >Apple</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'mobile', brand: 'xiaomi' }"
+              data-bs-dismiss="offcanvas"
+              >Xiaomi</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'mobile', brand: 'google' }"
+              data-bs-dismiss="offcanvas"
+              >Google</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'mobile', brand: 'redmagic' }"
+              data-bs-dismiss="offcanvas"
+              >RedMagic</a
+            >
+          </div>
+
+          <a
+            class="category-item"
+            data-bs-toggle="collapse"
+            href="#laptopBrands"
+          >
+            <i class="fa-solid fa-laptop fa-bounce"></i>
+            Laptops
+            <i class="fa-solid fa-chevron-down fa-bounce ms-auto"></i>
+          </a>
+          <div class="collapse brand-submenu" id="laptopBrands">
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'laptop', brand: 'apple' }"
+              data-bs-dismiss="offcanvas"
+              >Apple</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'laptop', brand: 'dell' }"
+              data-bs-dismiss="offcanvas"
+              >Dell</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'laptop', brand: 'hp' }"
+              data-bs-dismiss="offcanvas"
+              >HP</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'laptop', brand: 'lenovo' }"
+              data-bs-dismiss="offcanvas"
+              >Lenovo</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'laptop', brand: 'asus' }"
+              data-bs-dismiss="offcanvas"
+              >Asus</a
+            >
+          </div>
+
+          <a
+            class="category-item"
+            data-bs-toggle="collapse"
+            href="#otherCategories"
+          >
+            <i class="fa-solid fa-microchip fa-bounce"></i>
+            Other Electronics
+            <i class="fa-solid fa-chevron-down fa-bounce ms-auto"></i>
+          </a>
+          <div class="collapse brand-submenu" id="otherCategories">
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'otherelectronics', brand: 'tablet' }"
+              data-bs-dismiss="offcanvas"
+              >Tablets</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{ category: 'otherelectronics', brand: 'gaming' }"
+              data-bs-dismiss="offcanvas"
+              >Gaming</a
+            >
+            <a
+              class="brand-item"
+              [routerLink]="['/products']"
+              [queryParams]="{
+                category: 'otherelectronics',
+                brand: 'accessories'
+              }"
+              data-bs-dismiss="offcanvas"
+              >Accessories</a
+            >
+          </div>
+
+          <a
+            class="category-item view-all"
+            [routerLink]="['/products']"
+            data-bs-dismiss="offcanvas"
+          >
+            <i class="fa-solid fa-list fa-bounce"></i>
+            View All Products
+          </a>
+        </div>
+      </li>
+
+      <li class="nav-item mt-3">
+        <a
+          class="nav-link"
+          [routerLink]="['/about']"
+          routerLinkActive="active"
+          data-bs-dismiss="offcanvas"
+        >
+          <span>
+            <i class="fa-solid fa-address-card fa-bounce me-2"></i>
+            About
+          </span>
+          <i class="fa-solid fa-arrow-right-long fa-bounce"></i>
+        </a>
+      </li>
+
+      <li class="nav-item mt-3">
+        <a
+          class="nav-link"
+          [routerLink]="['/contact']"
+          routerLinkActive="active"
+          data-bs-dismiss="offcanvas"
+        >
+          <span>
+            <i class="fa-solid fa-phone fa-bounce me-2"></i>
+            Contact
+          </span>
+          <i class="fa-solid fa-arrow-right-long fa-bounce"></i>
+        </a>
+      </li>
+      <li class="nav-item mt-3">
+        <a
+          class="nav-link"
+          [routerLink]="['/orders']"
+          routerLinkActive="active"
+          data-bs-dismiss="offcanvas"
+        >
+          <span>
+            <i class="fa-solid fa-basket-shopping fa-bounce me-2"></i>
+            My Orders
+          </span>
+          <i class="fa-solid fa-arrow-right-long fa-bounce"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <button class="btn-arrow" data-bs-dismiss="offcanvas">
+    <i class="fa-solid fa-arrow-left fa-bounce fa-lg"></i>
+  </button>
+</div>
